@@ -1,0 +1,24 @@
+﻿@page
+@model HumanAPIConnectModel
+@{
+    ViewData["Title"] = "Human API Connect";
+}
+
+
+    <div class="hapi__token-container">
+        <h1>Human API demo</h1>
+        <!-- Add a button with the data-hapi-token attribute to open Connect -->
+        <button data-hapi-token=@Model.sessionToken>Connect your health data</button>
+    </div>
+
+@section scripts {
+
+    <script src="https://cdn.humanapi.co/humanapi-connect-client@latest.js"></script>
+    <script>
+        // Add an event listener for each lifecycle hook
+        HumanConnect.on("close", (response) => { console.log("Connect closed", response) });
+        HumanConnect.on("connect", (response) => { console.log("Source connected", response) });
+        HumanConnect.on("disconnect", (response) => { console.log("Source disconnected", response) });
+    </script>
+
+}

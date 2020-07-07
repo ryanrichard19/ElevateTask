@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanRazor", "HumanRazor\HumanRazor.csproj", "{09C765F4-EA06-4F17-9714-AE6E40B04E65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09C765F4-EA06-4F17-9714-AE6E40B04E65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09C765F4-EA06-4F17-9714-AE6E40B04E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09C765F4-EA06-4F17-9714-AE6E40B04E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09C765F4-EA06-4F17-9714-AE6E40B04E65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB0B7552-B2E9-4394-8472-014AEF55703A}
+	EndGlobalSection
+EndGlobal

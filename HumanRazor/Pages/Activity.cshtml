@@ -1,0 +1,38 @@
+﻿@page
+@model HumanRazor.Pages.ActivityModel
+@{
+    ViewData["Title"] = "Activity Summary";
+}
+
+
+
+<h1>Activity Summary</h1>
+<div class="table-responsive">
+    <table class="table mb-0">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Distance</th>
+                <th>Steps</th>
+                <th>Calories</th>
+                <th>Source</th>
+                <th>CaloriesBMR</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.activitySummary)
+            {
+                <tr>
+                    <td>@row.date</td>
+                    <td>@row.distance</td>
+                    <td>@row.steps</td>
+                    <td>@row.calories</td>
+                    @if(@row.source=="54dc427aaa6b4cb7d6202f01") {<td>Strav"</td> } else {<td>Fitbit</td>}
+                    <td>@row.sourceData.caloriesBMR</td>
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
