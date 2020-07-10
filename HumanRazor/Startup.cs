@@ -33,7 +33,13 @@ namespace HumanRazor
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddRazorPagesOptions(options =>
+                 {
+                     options.Conventions.AuthorizePage("/Activity");
+                     options.Conventions.AuthorizePage("/HumanAPIConnect");
+                 });
+
             services.AddHttpClient<IHumanAPIService, HumanAPIService>();
             services.AddHttpContextAccessor();
         }
