@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,29 +18,29 @@ namespace HumanRazor.Services
     {
         private readonly string _apiSecretKey;
         private readonly string _apiCientId;
-        private HttpClient _client;
+        private HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HumanAPIService(IConfiguration configuraton, 
-                               HttpClient client,
-                               UserManager<IdentityUser> userManager,
+        public HumanAPIService(IConfiguration configuraton,
+                               HttpClient httpClient,
+                               UserManager<User> userManager,
                                IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuraton;
             _apiSecretKey = _configuration["HumanAPISettings:ClientSecret"];
             _apiCientId = _configuration["HumanAPISettings:ClientId"];
-            _client = client;
+            _httpClient = httpClient;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<SessionTokenModel> GetSessionTokenAsync ()
+        public async Task<SessionTokenModel> GetSessionTokenAsync()
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
-     
+
             var data = new
             {
                 client_id = _apiCientId,
@@ -50,14 +50,16 @@ namespace HumanRazor.Services
                 client_user_email = user.Email,
 
             };
-            _client.DefaultRequestHeaders
-                .Accept
-                .Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            StringContent content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-            _client.BaseAddress = new System.Uri("https://auth.humanapi.co/v1/");
-            var httpResponse = await _client.PostAsync("https://auth.humanapi.co/v1/connect/token", content);
-            var sessionToken = JsonConvert.DeserializeObject<SessionTokenModel>(await httpResponse.Content.ReadAsStringAsync());
-            return sessionToken;
+            _httpClient.BaseAddress = new System.Uri("https://auth.humanapi.co/v1/");
+            var response = await _httpClient.PostAsJsonAsync($"https://auth.humanapi.co/v1/connect/token", data);
+
+            if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<SessionTokenModel>();
         }
 
         private async Task<AccessTokenModel> GetAccessTokenAsync()
@@ -73,12 +75,12 @@ namespace HumanRazor.Services
                 type = "access",
 
             };
-            _client.DefaultRequestHeaders
+            _httpClient.DefaultRequestHeaders
                 .Accept
                 .Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
             StringContent content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-            _client.BaseAddress = new System.Uri("https://auth.humanapi.co/v1/");
-            var httpResponse = await _client.PostAsync("https://auth.humanapi.co/v1/connect/token", content);
+            _httpClient.BaseAddress = new System.Uri("https://auth.humanapi.co/v1/");
+            var httpResponse = await _httpClient.PostAsync("https://auth.humanapi.co/v1/connect/token", content);
             var accessToken = JsonConvert.DeserializeObject<AccessTokenModel>(await httpResponse.Content.ReadAsStringAsync());
             return accessToken;
         }
@@ -86,12 +88,12 @@ namespace HumanRazor.Services
         public async Task<List<ActivityDataModel>> GetActivySummaryAsync()
         {
             AccessTokenModel accessTokenModel = await GetAccessTokenAsync();
-            _client.DefaultRequestHeaders
+            _httpClient.DefaultRequestHeaders
                 .Accept
                 .Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessTokenModel.access_token);
-          //  _client.BaseAddress = new System.Uri("https://api.humanapi.co/v1/");
-            var httpResponse = await _client.GetAsync("https://api.humanapi.co/v1/human/activities/summaries");
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessTokenModel.access_token);
+            //  _client.BaseAddress = new System.Uri("https://api.humanapi.co/v1/");
+            var httpResponse = await _httpClient.GetAsync("https://api.humanapi.co/v1/human/activities/summaries");
             var activitySummary = JsonConvert.DeserializeObject<List<ActivityDataModel>>(await httpResponse.Content.ReadAsStringAsync());
             return activitySummary;
         }
