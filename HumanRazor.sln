@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanRazor", "HumanRazor\HumanRazor.csproj", "{09C765F4-EA06-4F17-9714-AE6E40B04E65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanRazor", "HumanRazor\HumanRazor.csproj", "{09C765F4-EA06-4F17-9714-AE6E40B04E65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd", "BackEnd\BackEnd.csproj", "{9315F4C7-E76C-4EF5-9022-F1247B44739A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{09C765F4-EA06-4F17-9714-AE6E40B04E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C765F4-EA06-4F17-9714-AE6E40B04E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C765F4-EA06-4F17-9714-AE6E40B04E65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9315F4C7-E76C-4EF5-9022-F1247B44739A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9315F4C7-E76C-4EF5-9022-F1247B44739A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9315F4C7-E76C-4EF5-9022-F1247B44739A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9315F4C7-E76C-4EF5-9022-F1247B44739A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
