@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanRazor", "HumanRazor\Hu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd", "BackEnd\BackEnd.csproj", "{9315F4C7-E76C-4EF5-9022-F1247B44739A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanDTO", "HumanDTO\HumanDTO.csproj", "{9FA6E0FD-CB48-4462-9BF1-B744A6529BE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9315F4C7-E76C-4EF5-9022-F1247B44739A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9315F4C7-E76C-4EF5-9022-F1247B44739A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9315F4C7-E76C-4EF5-9022-F1247B44739A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FA6E0FD-CB48-4462-9BF1-B744A6529BE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FA6E0FD-CB48-4462-9BF1-B744A6529BE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FA6E0FD-CB48-4462-9BF1-B744A6529BE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FA6E0FD-CB48-4462-9BF1-B744A6529BE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
