@@ -4,12 +4,10 @@ using HumanRazor.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HumanRazor.Services
@@ -59,32 +57,35 @@ namespace HumanRazor.Services
 
             var data = new
             {
-                client_id = _configuration["HumanAPISettings:ClientSecret"],
+                client_id = _configuration["HumanAPISettings:ClientId"],
                 client_user_id = user.Email,
-                client_secret = _configuration["HumanAPISettings:ClientId"],
+                client_secret = _configuration["HumanAPISettings:ClientSecret"],
                 type = "access",
 
             };
-            _httpClient.DefaultRequestHeaders
-                .Accept
-                .Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            StringContent content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
             _httpClient.BaseAddress = new System.Uri("https://auth.humanapi.co/v1/");
-            var httpResponse = await _httpClient.PostAsync("https://auth.humanapi.co/v1/connect/token", content);
-            var accessToken = JsonConvert.DeserializeObject<AccessTokenModel>(await httpResponse.Content.ReadAsStringAsync());
-            return accessToken;
+            var response = await _httpClient.PostAsJsonAsync("https://auth.humanapi.co/v1/connect/token", data);
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<AccessTokenModel>(); ;
         }
 
         public async Task<List<ActivityDataModel>> GetActivySummaryAsync()
         {
             AccessTokenModel accessTokenModel = await GetAccessTokenAsync();
-            _httpClient.DefaultRequestHeaders
-                .Accept
-                .Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessTokenModel.access_token);
-            var httpResponse = await _httpClient.GetAsync("https://api.humanapi.co/v1/human/activities/summaries");
-            var activitySummary = JsonConvert.DeserializeObject<List<ActivityDataModel>>(await httpResponse.Content.ReadAsStringAsync());
-            return activitySummary;
+            var response = await _httpClient.GetAsync("https://api.humanapi.co/v1/human/activities/summaries");
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<List<ActivityDataModel>>();
         }
 
     }
