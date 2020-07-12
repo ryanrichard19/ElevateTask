@@ -26,6 +26,7 @@ namespace HumanRazor
                      options.Conventions.AuthorizePage("/HumanAPIConnect");
                  });
 
+
             services.AddHttpClient<IHumanAPIService, HumanAPIService>();
             services.AddHttpContextAccessor();
         }

@@ -10,6 +10,17 @@ namespace BackEnd.Models
 
         }
 
-        public DbSet<User> Users { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SessionToken>()
+               .Property(p => p.Id)
+               .ValueGeneratedOnAdd();
+
+       
+
+
+        }
+
+        public DbSet<SessionToken> SessionTokens { get; set; }
     }
 }
