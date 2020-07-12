@@ -1,9 +1,12 @@
+using HumanRazor.Data;
+using HumanRazor.HealthChecks;
 using HumanRazor.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace HumanRazor
 {
@@ -27,7 +30,15 @@ namespace HumanRazor
                  });
 
 
-            services.AddHttpClient<IHumanAPIService, HumanAPIService>();
+            services.AddHttpClient<IApiClient, ApiClient>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration["serviceUrl"]);
+            });
+
+            services.AddHealthChecks()
+                  .AddCheck<BackendHealthCheck>("backend")
+                  .AddDbContextCheck<IdentityDbContext>();
+
             services.AddHttpContextAccessor();
         }
 
@@ -46,6 +57,9 @@ namespace HumanRazor
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithReExecute("/Status/{0}");
+
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -57,6 +71,7 @@ namespace HumanRazor
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

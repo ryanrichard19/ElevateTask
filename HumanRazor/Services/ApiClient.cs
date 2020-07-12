@@ -4,6 +4,7 @@ using HumanRazor.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HumanRazor.Services
 {
-    public class HumanAPIService : IHumanAPIService
+    public class ApiClient : IApiClient
     {
 
         private HttpClient _httpClient;
@@ -20,7 +21,7 @@ namespace HumanRazor.Services
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HumanAPIService(IConfiguration configuraton,
+        public ApiClient(IConfiguration configuraton,
                                HttpClient httpClient,
                                UserManager<User> userManager,
                                IHttpContextAccessor httpContextAccessor)
@@ -37,7 +38,6 @@ namespace HumanRazor.Services
             var user = await _userManager.FindByIdAsync(userId);
 
 
-            _httpClient.BaseAddress = new System.Uri("https://localhost:44306/");
             var response = await _httpClient.GetAsync($"/api/SessionTokens/{user.Email}");
 
             if (response.StatusCode == HttpStatusCode.Conflict)
@@ -64,7 +64,7 @@ namespace HumanRazor.Services
 
             };
 
-            _httpClient.BaseAddress = new System.Uri("https://auth.humanapi.co/v1/");
+            _httpClient.BaseAddress = new Uri("https://auth.humanapi.co/v1/");
             var response = await _httpClient.PostAsJsonAsync("https://auth.humanapi.co/v1/connect/token", data);
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
@@ -86,6 +86,20 @@ namespace HumanRazor.Services
             }
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<List<ActivityDataModel>>();
+        }
+
+        public async Task<bool> CheckHealthAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetStringAsync("/health");
+
+                return string.Equals(response, "Healthy", StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
     }

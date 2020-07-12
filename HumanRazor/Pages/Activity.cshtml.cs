@@ -13,11 +13,11 @@ namespace HumanRazor.Pages
     public class ActivityModel : PageModel
     {
         private readonly ILogger<ActivityModel> _logger;
-        private readonly IHumanAPIService _humanAPIService;
+        private readonly IApiClient _humanAPIService;
         public List<ActivityDataModel> activitySummary { get; set; }
        
 
-        public ActivityModel(ILogger<ActivityModel> logger, IHumanAPIService humanAPIService)
+        public ActivityModel(ILogger<ActivityModel> logger, IApiClient humanAPIService)
         {
             _logger = logger;
             _humanAPIService = humanAPIService;

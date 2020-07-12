@@ -13,10 +13,10 @@ namespace HumanRazor.Pages
     public class HumanAPIConnectModel : PageModel
     {
         private readonly ILogger<HumanAPIConnectModel> _logger;
-        private readonly IHumanAPIService _humanAPIService;
+        private readonly IApiClient _humanAPIService;
         public string sessionToken { get; set; }        
 
-        public HumanAPIConnectModel(ILogger<HumanAPIConnectModel> logger, IHumanAPIService humanAPIService)
+        public HumanAPIConnectModel(ILogger<HumanAPIConnectModel> logger, IApiClient humanAPIService)
         {
             _logger = logger;
             _humanAPIService = humanAPIService;

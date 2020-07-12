@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace HumanRazor.Services
 {
-    public interface IHumanAPIService
+    public interface IApiClient
     {
         Task<SessionTokenResponse> GetSessionTokenAsync();
         Task<List<ActivityDataModel>> GetActivySummaryAsync();
+        Task<bool> CheckHealthAsync();
     }
 }
