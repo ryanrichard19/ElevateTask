@@ -14,8 +14,7 @@ namespace HumanRazor.Pages
     {
         private readonly ILogger<HumanAPIConnectModel> _logger;
         private readonly IHumanAPIService _humanAPIService;
-        public string sessionToken { get; set; }
-        private SessionTokenModel sessionTokenModel { get; set; }
+        public string sessionToken { get; set; }        
 
         public HumanAPIConnectModel(ILogger<HumanAPIConnectModel> logger, IHumanAPIService humanAPIService)
         {
@@ -25,8 +24,8 @@ namespace HumanRazor.Pages
 
         public async Task OnGet()
         {
-            sessionTokenModel = await _humanAPIService.GetSessionTokenAsync();
-            sessionToken = sessionTokenModel.session_token;
+            var sessionTokenModel = await _humanAPIService.GetSessionTokenAsync();
+            sessionToken = sessionTokenModel.SessionToken;
         }
     }
 }
